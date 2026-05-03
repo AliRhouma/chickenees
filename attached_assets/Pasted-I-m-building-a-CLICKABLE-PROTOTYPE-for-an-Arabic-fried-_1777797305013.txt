@@ -1,0 +1,65 @@
+I'm building a CLICKABLE PROTOTYPE for "تشيكنييز" — an Arabic fried 
+chicken restaurant in MENA. This is for an investor demo, NOT a real product.
+
+STACK: Next.js 14 (App Router) + Tailwind CSS + Framer Motion + TypeScript.
+LANGUAGE: Arabic only, RTL layout throughout.
+
+I've attached three files. Read them in this order:
+
+1. CHICKENEES-BRAND-RULES.md — THE RULEBOOK. This is the source of truth.
+   It tells you what to do, what not to do, color ratios, animation budgets,
+   common mistakes. Re-read sections 15 (checklist) and 17 (mistakes) 
+   before EVERY page you build.
+
+2. design-system.html — THE VISUAL REFERENCE. Open this for the actual
+   CSS, SVGs, and component implementations. Copy code directly from here.
+
+3. mock-data.md — ALL the fake data. Use ONLY this. Don't invent new items.
+
+THE ONE-SENTENCE RULE (from rulebook section 0):
+"Loud. Crispy. Tilted -8°. Cream base, ink lines, red accent, yellow spark."
+If a page doesn't feel like a fried-chicken poster having fun, it's wrong.
+
+CRITICAL HARD LIMITS (from rulebook):
+- Color ratio: 55% cream / 25% ink / 15% red / 5% yellow
+- Max 2 stickers per hero
+- 1 marquee per page (24-28 second loop)
+- 1 yellow underline-highlight per hero  
+- 7 words max for hero copy
+- Animation: 1 motion per body section, max
+- NO gradients, NO blur shadows, NO photos as backgrounds
+
+SCOPE: 15 pages — marketing site (4) + customer app (11). Full list next msg.
+
+ABSOLUTE DO-NOT-BUILD:
+- NO backend, NO database, NO API routes
+- NO real auth (Firebase, Supabase, NextAuth, Clerk)
+- NO payment integration  
+- NO tests, NO deployment config
+- Hardcode EVERYTHING from mock-data.md
+- Use React state + setTimeout for all "logic"
+
+YOUR TASK RIGHT NOW — DO NOT BUILD PAGES YET:
+
+1. Confirm you've read all 3 files. Quote the One-Sentence Rule back to me.
+2. Set up Next.js + Tailwind + RTL config + Cairo/Anton/JetBrains Mono fonts
+3. Create tailwind.config with brand tokens (colors, skew utility, hard 
+   shadow utility, halftone background utility)
+4. Create /data folder with: products.ts, user.ts, orders.ts, branches.ts, 
+   rewards.ts (populate from mock-data.md exactly)
+5. Create /components/ui folder with these reusable components, each 
+   matching the rulebook precisely:
+   - Button (4 variants: primary, red, yellow, ghost — all with -8° skew 
+     + counter-skew on inner span)
+   - Badge (4 color variants)
+   - Sticker (3 shapes: circle, rect, tag — with rotation + wiggle option)
+   - ProductCard (with halftone overlay + card grid color rotation)
+   - Pill (mono font for meta info)
+   - Marquee (24-28s loop, doesn't pause on hover)
+   - HalftoneSection (the dot pattern wrapper)
+6. Create global layout: <html lang="ar" dir="rtl">, Cairo as base font
+7. Show me a /test page rendering all UI components for verification
+
+DO NOT create the 15 pages yet. Just structure + components.
+After showing me the components, run them through rulebook section 17 
+(mistakes table) and confirm none apply. Then wait for my approval.

@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>تشيكنييز — Design System v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Anton&family=Archivo+Black&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#E31C23;
+    --red-dark:#B5161C;
+    --ink:#111111;
+    --cream:#F7F2E9;
+    --cream-2:#EFE8DA;
+    --yellow:#FFB400;
+    --gray:#8A8580;
+    --line:rgba(17,17,17,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:90px}
+  html,body{background:var(--cream);color:var(--ink);font-family:'Cairo',system-ui,sans-serif;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--red);color:var(--cream)}
+  code,.mono{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:-.2px}
+
+  /* ============ TOP BAR ============ */
+  header.top{
+    position:sticky;top:0;z-index:50;
+    background:var(--cream);
+    border-bottom:2px solid var(--ink);
+    padding:14px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+    backdrop-filter:blur(6px);
+  }
+  header.top .brand{display:flex;align-items:center;gap:12px}
+  header.top .brand svg{width:42px;height:42px}
+  header.top .brand .word{font-family:'Cairo';font-weight:900;font-size:22px;transform:skewX(-8deg);display:inline-block}
+  header.top .meta{display:flex;align-items:center;gap:14px;font-family:'JetBrains Mono';font-size:12px}
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 12px;border:2px solid var(--ink);
+    background:var(--cream);font-weight:700;font-size:12px;
+    font-family:'JetBrains Mono';letter-spacing:.5px;
+  }
+  .pill.red{background:var(--red);color:var(--cream);border-color:var(--ink)}
+  .pill.yellow{background:var(--yellow);color:var(--ink)}
+  .pill.ink{background:var(--ink);color:var(--cream)}
+
+  /* ============ LAYOUT ============ */
+  .shell{
+    display:grid;
+    grid-template-columns:240px 1fr;
+    max-width:1480px;margin:0 auto;
+    align-items:flex-start;
+  }
+  /* RTL: side nav appears on the right visually */
+  aside.sidenav{
+    position:sticky;top:80px;
+    align-self:start;
+    padding:36px 24px;
+    border-left:2px solid var(--ink);
+    height:calc(100vh - 80px);
+    overflow-y:auto;
+  }
+  aside.sidenav h5{
+    font-family:'JetBrains Mono';font-size:11px;font-weight:600;
+    letter-spacing:2px;color:var(--gray);text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  aside.sidenav ul{list-style:none;display:flex;flex-direction:column;gap:2px}
+  aside.sidenav a{
+    display:flex;align-items:center;gap:10px;
+    padding:8px 10px;font-weight:700;font-size:14px;
+    border-right:3px solid transparent;
+    transition:all .15s ease;
+  }
+  aside.sidenav a .num{
+    font-family:'JetBrains Mono';font-size:11px;color:var(--gray);font-weight:600;
+  }
+  aside.sidenav a:hover,aside.sidenav a.active{
+    background:var(--ink);color:var(--cream);border-right-color:var(--red);
+  }
+  aside.sidenav a:hover .num,aside.sidenav a.active .num{color:var(--yellow)}
+
+  main.doc{padding:0 40px 80px;min-width:0}
+
+  /* ============ SECTION HEAD ============ */
+  section{padding:80px 0;border-bottom:2px solid var(--line);scroll-margin-top:90px}
+  section:last-of-type{border-bottom:none}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:8px;flex-wrap:wrap}
+  .sec-num{
+    font-family:'Anton',sans-serif;font-size:20px;color:var(--red);
+    letter-spacing:1px;
+  }
+  .sec-kicker{
+    font-family:'JetBrains Mono';font-size:12px;
+    color:var(--gray);text-transform:uppercase;letter-spacing:2px;
+    font-weight:600;
+  }
+  .sec-head h2{
+    font-family:'Cairo';font-weight:900;
+    font-size:clamp(40px,5vw,72px);line-height:1;letter-spacing:-1.5px;
+    width:100%;margin-top:6px;
+  }
+  .sec-head h2 em{
+    font-style:normal;color:var(--red);
+    transform:skewX(-8deg);display:inline-block;
+  }
+  .sec-lede{
+    font-size:18px;line-height:1.7;font-weight:600;color:#333;
+    max-width:680px;margin:24px 0 48px;
+  }
+
+  /* ============ HERO COVER ============ */
+  .cover{
+    padding:60px 0 100px;
+    position:relative;border-bottom:3px solid var(--ink);
+  }
+  .cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(17,17,17,.07) 1px,transparent 1.2px);
+    background-size:14px 14px;pointer-events:none;
+  }
+  .cover-grid{position:relative;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:end}
+  .cover-grid h1{
+    font-family:'Cairo';font-weight:900;
+    font-size:clamp(60px,9vw,140px);line-height:.9;letter-spacing:-3px;
+  }
+  .cover-grid h1 .alt{color:var(--red);transform:skewX(-8deg);display:inline-block;text-shadow:6px 6px 0 var(--ink)}
+  .cover-grid h1 .small{display:block;font-size:.32em;font-weight:900;color:var(--ink);margin-top:24px;letter-spacing:8px;font-family:'Anton'}
+  .cover-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .cover-meta .cell{
+    border:2px solid var(--ink);padding:14px;background:var(--cream);
+    box-shadow:5px 5px 0 var(--ink);
+  }
+  .cover-meta .cell .lbl{font-family:'JetBrains Mono';font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:1.5px}
+  .cover-meta .cell .val{font-family:'Cairo';font-weight:900;font-size:20px;margin-top:4px}
+  .cover-meta .cell.dark{background:var(--ink);color:var(--cream)}
+  .cover-meta .cell.dark .lbl{color:var(--yellow)}
+  .cover-meta .cell.red{background:var(--red);color:var(--cream)}
+
+  /* diagonal slogan band */
+  .slogan-band{
+    position:relative;margin-top:40px;
+    background:var(--ink);color:var(--cream);
+    padding:18px 0;overflow:hidden;
+    border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);
+    transform:rotate(-2deg);
+  }
+  .slogan-band-track{
+    display:flex;gap:50px;align-items:center;
+    font-family:'Anton';font-size:38px;letter-spacing:2px;
+    white-space:nowrap;animation:slide 24s linear infinite;
+  }
+  @keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .slogan-band-track .dot{width:12px;height:12px;background:var(--red);border-radius:50%;flex-shrink:0}
+  .slogan-band-track .star{color:var(--yellow);font-size:30px}
+
+  /* ============ COLOR SECTION ============ */
+  .color-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:40px}
+  .swatch{
+    border:2px solid var(--ink);
+    overflow:hidden;
+    box-shadow:6px 6px 0 var(--ink);
+    transition:transform .2s ease;
+  }
+  .swatch:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--ink)}
+  .swatch .chip{height:200px;display:flex;align-items:flex-end;padding:14px;position:relative}
+  .swatch .chip .role{
+    font-family:'JetBrains Mono';font-size:11px;letter-spacing:1.5px;
+    text-transform:uppercase;font-weight:700;
+    background:rgba(0,0,0,.65);color:var(--cream);
+    padding:4px 8px;
+  }
+  .swatch.red .chip{background:var(--red);color:var(--cream)}
+  .swatch.ink .chip{background:var(--ink);color:var(--cream)}
+  .swatch.cream .chip{background:var(--cream-2);color:var(--ink)}
+  .swatch.cream .chip .role{background:rgba(17,17,17,.85)}
+  .swatch.yellow .chip{background:var(--yellow);color:var(--ink)}
+  .swatch.yellow .chip .role{background:rgba(17,17,17,.85)}
+  .swatch .info{padding:14px;background:var(--cream);border-top:2px solid var(--ink)}
+  .swatch .info .name{font-family:'Cairo';font-weight:900;font-size:18px;letter-spacing:-.3px}
+  .swatch .info .codes{margin-top:8px;display:flex;flex-direction:column;gap:3px}
+  .swatch .info .codes .row{
+    display:flex;justify-content:space-between;font-family:'JetBrains Mono';font-size:12px;
+  }
+  .swatch .info .codes .row span:first-child{color:var(--gray);font-weight:600}
+
+  /* color usage ratio bar */
+  .ratio-bar{
+    display:flex;height:60px;border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);
+    margin-bottom:14px;
+  }
+  .ratio-bar > div{display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:14px;letter-spacing:1px}
+  .ratio-bar .r-cream{background:var(--cream-2);color:var(--ink);flex:55}
+  .ratio-bar .r-ink{background:var(--ink);color:var(--cream);flex:25}
+  .ratio-bar .r-red{background:var(--red);color:var(--cream);flex:15}
+  .ratio-bar .r-yellow{background:var(--yellow);color:var(--ink);flex:5}
+  .ratio-note{font-family:'JetBrains Mono';font-size:12px;color:var(--gray)}
+
+  /* ============ TYPOGRAPHY SECTION ============ */
+  .type-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px}
+  .type-card{
+    border:2px solid var(--ink);background:var(--cream);
+    padding:30px;box-shadow:6px 6px 0 var(--ink);
+    position:relative;overflow:hidden;
+  }
+  .type-card.dark{background:var(--ink);color:var(--cream);box-shadow:6px 6px 0 var(--red)}
+  .type-card .label{font-family:'JetBrains Mono';font-size:11px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;font-weight:600}
+  .type-card.dark .label{color:var(--yellow)}
+  .type-card h3{font-family:'Cairo';font-weight:900;font-size:32px;margin-top:6px;letter-spacing:-1px}
+  .type-card .specimen-ar{font-family:'Cairo';font-weight:900;font-size:200px;line-height:.9;color:var(--red);margin:20px 0;letter-spacing:-6px}
+  .type-card .specimen-en{font-family:'Anton';font-size:200px;line-height:.9;letter-spacing:-2px;margin:20px 0;color:var(--ink)}
+  .type-card.dark .specimen-en{color:var(--yellow)}
+  .type-card .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .type-card .meta-row .pill{background:var(--cream);font-size:11px;padding:4px 10px}
+  .type-card.dark .meta-row .pill{background:#222;color:var(--cream);border-color:#444}
+
+  /* type scale table */
+  .scale-table{
+    border:2px solid var(--ink);background:var(--cream);
+    box-shadow:6px 6px 0 var(--ink);
+    overflow:hidden;margin-bottom:40px;
+  }
+  .scale-table .thead{
+    display:grid;grid-template-columns:120px 1fr 120px 100px 100px;
+    background:var(--ink);color:var(--cream);
+    font-family:'JetBrains Mono';font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  }
+  .scale-table .thead > div{padding:12px 14px;border-left:1px solid #333}
+  .scale-table .row{
+    display:grid;grid-template-columns:120px 1fr 120px 100px 100px;
+    border-top:1px solid var(--line);align-items:center;
+  }
+  .scale-table .row:first-of-type{border-top:none}
+  .scale-table .row > div{padding:14px;border-left:1px solid var(--line)}
+  .scale-table .row .name{font-family:'JetBrains Mono';font-size:12px;color:var(--gray);font-weight:600}
+  .scale-table .row .preview{font-family:'Cairo';font-weight:900;line-height:1;letter-spacing:-1px}
+  .scale-table .row .size,.scale-table .row .lh,.scale-table .row .ls{font-family:'JetBrains Mono';font-size:12px}
+  .scale-table .row .size{color:var(--red);font-weight:700}
+
+  /* ============ LOGO SECTION ============ */
+  .logo-display{
+    display:grid;grid-template-columns:1.2fr 1fr;gap:24px;margin-bottom:40px;
+  }
+  .logo-main{
+    background:var(--cream-2);border:2px solid var(--ink);
+    padding:60px;display:flex;align-items:center;justify-content:center;
+    box-shadow:6px 6px 0 var(--ink);position:relative;min-height:340px;
+  }
+  .logo-main::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(17,17,17,.06) 1px,transparent 1.2px);
+    background-size:12px 12px;
+  }
+  .logo-mark{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
+  .logo-mark svg{width:160px;height:160px}
+  .logo-mark .word{font-family:'Cairo';font-weight:900;font-size:48px;transform:skewX(-8deg);display:inline-block;letter-spacing:-1px}
+  .logo-mark .tag{font-family:'Anton';font-size:14px;letter-spacing:6px;color:var(--red)}
+  .logo-variants{display:grid;grid-template-rows:1fr 1fr;gap:16px}
+  .logo-variant{
+    border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    padding:24px;position:relative;
+  }
+  .logo-variant.dark{background:var(--ink);color:var(--cream)}
+  .logo-variant.red{background:var(--red);color:var(--cream)}
+  .logo-variant .lbl{
+    position:absolute;top:8px;right:8px;
+    font-family:'JetBrains Mono';font-size:10px;letter-spacing:1.5px;
+    background:rgba(0,0,0,.7);color:var(--cream);padding:3px 7px;
+  }
+  .logo-variant .word{font-family:'Cairo';font-weight:900;font-size:30px;transform:skewX(-8deg);display:inline-block}
+
+  /* clear space + grid */
+  .clear-space{
+    background:var(--cream-2);border:2px solid var(--ink);
+    padding:60px;box-shadow:6px 6px 0 var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;min-height:280px;
+  }
+  .clear-space-inner{
+    position:relative;
+    border:2px dashed var(--red);
+    padding:50px;
+  }
+  .clear-space-inner::before,.clear-space-inner::after{
+    content:"X";position:absolute;
+    font-family:'Anton';color:var(--red);font-size:24px;
+  }
+  .clear-space-inner::before{top:-14px;left:-14px}
+  .clear-space-inner::after{bottom:-14px;right:-14px}
+  .clear-space-inner svg{width:120px;height:120px}
+
+  /* dos and donts */
+  .dos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:40px}
+  .do-card{
+    border:2px solid var(--ink);background:var(--cream);
+    padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+    min-height:200px;position:relative;
+  }
+  .do-card .icon{font-family:'Anton';font-size:14px;letter-spacing:2px;padding:4px 8px;margin-bottom:auto}
+  .do-card.do .icon{background:#1B7F3D;color:var(--cream)}
+  .do-card.dont .icon{background:var(--red);color:var(--cream)}
+  .do-card .demo{display:flex;align-items:center;justify-content:center;flex:1;width:100%}
+  .do-card .demo svg{width:80px;height:80px}
+  .do-card .demo .word{font-family:'Cairo';font-weight:900;font-size:22px;transform:skewX(-8deg);display:inline-block}
+  .do-card .caption{font-size:13px;color:#444;text-align:center;line-height:1.5;font-weight:600;margin-top:12px}
+  .do-card.dont .demo{position:relative}
+  .do-card.dont .demo::after{
+    content:"";position:absolute;left:-4px;right:-4px;top:50%;
+    height:3px;background:var(--red);transform:rotate(-15deg);
+  }
+  .stretched{transform:scaleX(1.6);display:inline-block}
+  .recolored svg{filter:hue-rotate(120deg) saturate(.6)}
+
+  /* ============ MASCOT SECTION ============ */
+  .mascot-row{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:40px}
+  .mascot-tile{
+    border:2px solid var(--ink);
+    padding:20px;display:flex;flex-direction:column;align-items:center;gap:8px;
+    aspect-ratio:1/1.05;justify-content:center;
+    box-shadow:4px 4px 0 var(--ink);
+  }
+  .mascot-tile.t1{background:var(--cream)}
+  .mascot-tile.t2{background:var(--ink);color:var(--cream)}
+  .mascot-tile.t3{background:var(--red);color:var(--cream)}
+  .mascot-tile.t4{background:var(--yellow)}
+  .mascot-tile.t5{background:var(--cream-2)}
+  .mascot-tile svg{width:60%;height:auto}
+  .mascot-tile .name{font-family:'JetBrains Mono';font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700}
+
+  /* ============ ICONOGRAPHY ============ */
+  .icon-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:32px}
+  .icon-tile{
+    aspect-ratio:1/1;border:2px solid var(--ink);
+    background:var(--cream);
+    display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;
+    box-shadow:4px 4px 0 var(--ink);position:relative;
+  }
+  .icon-tile svg{width:50%;height:50%}
+  .icon-tile .lbl{font-family:'JetBrains Mono';font-size:10px;letter-spacing:1px;color:var(--gray);text-transform:uppercase;font-weight:700}
+  .icon-tile.bolt svg{color:var(--red)}
+  .icon-tile.star svg{color:var(--yellow)}
+  .icon-tile.dot svg{color:var(--ink)}
+  .icon-tile.speed svg{width:75%}
+  .icon-tile.arrow svg{color:var(--ink)}
+  .icon-tile.tm svg{color:var(--red)}
+
+  /* ============ PATTERNS ============ */
+  .pattern-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+  .pattern-tile{
+    aspect-ratio:1.4/1;border:2px solid var(--ink);
+    box-shadow:5px 5px 0 var(--ink);
+    overflow:hidden;position:relative;
+  }
+  .pattern-tile .lbl{
+    position:absolute;bottom:10px;right:10px;z-index:2;
+    font-family:'JetBrains Mono';font-size:10px;letter-spacing:1.5px;
+    background:var(--ink);color:var(--cream);padding:4px 8px;
+    text-transform:uppercase;font-weight:700;
+  }
+  .pat-halftone-light{background:var(--cream-2);background-image:radial-gradient(rgba(17,17,17,.25) 2px,transparent 2.5px);background-size:14px 14px}
+  .pat-halftone-dark{background:var(--ink);background-image:radial-gradient(rgba(255,255,255,.18) 2px,transparent 2.5px);background-size:14px 14px}
+  .pat-stripes{background:repeating-linear-gradient(-12deg,var(--red) 0,var(--red) 30px,var(--ink) 30px,var(--ink) 60px)}
+  .pat-action-lines{
+    background:var(--cream-2);position:relative;overflow:hidden;
+  }
+  .pat-action-lines::before{
+    content:"";position:absolute;inset:-30px;
+    background:repeating-linear-gradient(90deg,transparent 0,transparent 18px,var(--red) 18px,var(--red) 22px);
+    transform:rotate(-8deg);
+  }
+  .pat-icons{
+    background:var(--ink);position:relative;
+    display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:14px;padding:16px;
+  }
+  .pat-icons svg{width:32px;height:32px;color:#666}
+  .pat-icons svg.on{color:var(--red)}
+  .pat-icons svg.y{color:var(--yellow)}
+  .pat-yellow-bolt{background:var(--yellow);position:relative;overflow:hidden}
+  .pat-yellow-bolt::before{
+    content:"";position:absolute;inset:-20px;
+    background-image:radial-gradient(rgba(17,17,17,.18) 2px,transparent 2.5px);
+    background-size:18px 18px;
+  }
+  .pat-yellow-bolt svg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;color:var(--ink)}
+
+  /* ============ COMPONENTS ============ */
+  .component-block{margin-bottom:48px}
+  .component-block h3{
+    font-family:'Cairo';font-weight:900;font-size:24px;
+    display:flex;align-items:center;gap:12px;margin-bottom:18px;
+  }
+  .component-block h3::before{
+    content:"";width:8px;height:24px;background:var(--red);
+    transform:skewX(-12deg);
+  }
+  .preview{
+    border:2px solid var(--ink);background:var(--cream);
+    padding:40px;box-shadow:6px 6px 0 var(--ink);
+    display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;
+    position:relative;min-height:140px;margin-bottom:14px;
+    background-image:radial-gradient(rgba(17,17,17,.06) 1px,transparent 1.2px);
+    background-size:14px 14px;
+  }
+  .preview-tag{
+    position:absolute;top:8px;right:8px;
+    font-family:'JetBrains Mono';font-size:10px;letter-spacing:1.5px;
+    background:var(--ink);color:var(--cream);padding:3px 8px;
+    text-transform:uppercase;font-weight:700;
+  }
+  .codeblock{
+    background:#1A1A1A;color:#F0F0F0;
+    border:2px solid var(--ink);box-shadow:6px 6px 0 var(--red);
+    padding:18px;font-family:'JetBrains Mono';font-size:12.5px;
+    line-height:1.7;overflow-x:auto;
+  }
+  .codeblock .tag{color:#FF6B6B}
+  .codeblock .attr{color:#FFB400}
+  .codeblock .str{color:#9DECC0}
+  .codeblock .com{color:#666;font-style:italic}
+
+  /* button samples */
+  .btn-primary{
+    background:var(--ink);color:var(--cream);
+    padding:16px 30px;font-weight:900;font-size:16px;
+    border:2px solid var(--ink);font-family:'Cairo';
+    box-shadow:5px 5px 0 var(--red);
+    transform:skewX(-8deg);
+    transition:transform .15s ease, box-shadow .15s ease;
+    cursor:pointer;
+  }
+  .btn-primary span{display:inline-block;transform:skewX(8deg)}
+  .btn-primary:hover{transform:skewX(-8deg) translate(-3px,-3px);box-shadow:8px 8px 0 var(--red)}
+  .btn-red{background:var(--red);color:var(--cream);box-shadow:5px 5px 0 var(--ink)}
+  .btn-red:hover{box-shadow:8px 8px 0 var(--ink)}
+  .btn-yellow{background:var(--yellow);color:var(--ink);box-shadow:5px 5px 0 var(--ink)}
+  .btn-yellow:hover{box-shadow:8px 8px 0 var(--ink)}
+  .btn-ghost{background:transparent;color:var(--ink);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--red);font-weight:900;padding:16px 28px;font-family:'Cairo';transform:skewX(-8deg);cursor:pointer;font-size:16px}
+  .btn-ghost span{display:inline-block;transform:skewX(8deg)}
+
+  /* badges/tags */
+  .badge{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 12px;font-family:'JetBrains Mono';font-size:11px;
+    font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    border:2px solid var(--ink);
+  }
+  .badge.b-red{background:var(--red);color:var(--cream)}
+  .badge.b-ink{background:var(--ink);color:var(--cream)}
+  .badge.b-yellow{background:var(--yellow);color:var(--ink)}
+  .badge.b-cream{background:var(--cream);color:var(--ink)}
+
+  /* sticker examples */
+  .sticker-circle{
+    width:120px;height:120px;border-radius:50%;
+    background:var(--red);color:var(--cream);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cairo';font-weight:900;font-size:22px;
+    border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);
+    transform:rotate(-8deg);
+  }
+  .sticker-rect{
+    padding:14px 22px;background:var(--yellow);color:var(--ink);
+    font-family:'Cairo';font-weight:900;font-size:22px;
+    border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);
+    transform:rotate(6deg);border-radius:14px;
+  }
+  .sticker-tag{
+    padding:10px 18px;background:var(--ink);color:var(--cream);
+    font-family:'Anton';font-size:18px;letter-spacing:2px;
+    transform:skewX(-8deg);box-shadow:4px 4px 0 var(--red);
+    border:2px solid var(--ink);
+  }
+  .sticker-tag span{display:inline-block;transform:skewX(8deg)}
+
+  /* card sample */
+  .sample-card{
+    background:var(--ink);color:var(--cream);
+    padding:22px;width:240px;border:2px solid var(--ink);
+    position:relative;overflow:hidden;
+  }
+  .sample-card.red{background:var(--red)}
+  .sample-card.yellow{background:var(--yellow);color:var(--ink)}
+  .sample-card::before{content:"";position:absolute;inset:0;background-image:radial-gradient(currentColor 1px,transparent 1.2px);background-size:12px 12px;opacity:.18}
+  .sample-card .num{font-family:'Anton';font-size:60px;line-height:1;position:relative;z-index:2}
+  .sample-card .num small{font-size:18px;font-family:'Cairo';font-weight:900;vertical-align:top;margin-right:6px;display:inline-block;margin-top:8px}
+  .sample-card .name{font-family:'Cairo';font-weight:900;font-size:20px;margin-top:6px;position:relative;z-index:2}
+  .sample-card .en{font-family:'Anton';font-size:13px;letter-spacing:1.5px;opacity:.8;position:relative;z-index:2}
+
+  /* ============ VOICE ============ */
+  .voice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:32px}
+  .voice-card{
+    border:2px solid var(--ink);background:var(--cream);
+    padding:24px;box-shadow:5px 5px 0 var(--ink);
+  }
+  .voice-card .num{font-family:'Anton';font-size:32px;color:var(--red);line-height:1}
+  .voice-card .title{font-family:'Cairo';font-weight:900;font-size:22px;margin-top:6px;letter-spacing:-.5px}
+  .voice-card .desc{font-size:14px;color:#444;line-height:1.6;margin-top:10px;font-weight:600}
+
+  .quotes-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .quote{
+    border:2px solid var(--ink);padding:24px;box-shadow:5px 5px 0 var(--ink);
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .quote.yes{background:var(--cream)}
+  .quote.no{background:var(--ink);color:var(--cream)}
+  .quote .lbl{font-family:'JetBrains Mono';font-size:11px;letter-spacing:2px;font-weight:700}
+  .quote.yes .lbl{color:#1B7F3D}
+  .quote.no .lbl{color:var(--red)}
+  .quote .text{font-family:'Cairo';font-weight:900;font-size:22px;line-height:1.4;letter-spacing:-.5px}
+  .quote .note{font-family:'JetBrains Mono';font-size:12px;color:var(--gray)}
+  .quote.no .note{color:#999}
+
+  /* ============ APPLICATIONS ============ */
+  .app-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px;margin-bottom:32px}
+  .app-tile{
+    border:2px solid var(--ink);background:var(--cream);
+    overflow:hidden;box-shadow:6px 6px 0 var(--ink);
+    aspect-ratio:1/1.1;display:flex;align-items:center;justify-content:center;
+    position:relative;flex-direction:column;
+  }
+  .app-tile .tag{
+    position:absolute;top:10px;right:10px;
+    font-family:'JetBrains Mono';font-size:10px;letter-spacing:1.5px;
+    background:var(--ink);color:var(--cream);padding:3px 8px;font-weight:700;text-transform:uppercase;
+  }
+
+  /* package mockup */
+  .pkg{
+    background:var(--cream-2);width:100%;height:100%;
+    display:flex;align-items:center;justify-content:center;
+    background-image:radial-gradient(rgba(17,17,17,.06) 1px,transparent 1.2px);background-size:14px 14px;
+  }
+  .pkg-box{
+    width:60%;aspect-ratio:1.3/1;background:var(--cream);
+    border:2.5px solid var(--ink);
+    background-image:repeating-linear-gradient(-12deg,var(--red) 0,var(--red) 26px,var(--cream) 26px,var(--cream) 52px);
+    position:relative;display:flex;align-items:center;justify-content:center;
+    box-shadow:5px 5px 0 var(--ink);
+    transform:rotate(-3deg);
+  }
+  .pkg-box::after{
+    content:"CRUNCH MODE ON";position:absolute;
+    background:var(--ink);color:var(--cream);
+    padding:6px 14px;font-family:'Anton';font-size:14px;letter-spacing:2px;
+    transform:skewX(-8deg);
+  }
+
+  /* social mockup */
+  .social{background:var(--red);color:var(--cream);padding:24px;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+  .social::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.15) 1px,transparent 1.2px);background-size:14px 14px}
+  .social .top{font-family:'JetBrains Mono';font-size:11px;letter-spacing:2px;font-weight:700;position:relative;z-index:2}
+  .social .center{font-family:'Cairo';font-weight:900;font-size:42px;line-height:.95;letter-spacing:-1px;position:relative;z-index:2;text-align:center;margin:auto 0}
+  .social .center .crisp{color:var(--ink);transform:skewX(-8deg);display:inline-block;text-shadow:3px 3px 0 var(--cream)}
+  .social .bottom{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+  .social .bottom svg{width:36px;height:36px}
+  .social .bottom .word{font-family:'Cairo';font-weight:900;transform:skewX(-8deg);display:inline-block;font-size:18px}
+
+  /* app icon mockup */
+  .appicon{background:var(--ink);width:100%;height:100%;padding:30px;display:flex;align-items:center;justify-content:center;position:relative}
+  .appicon::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.08) 1px,transparent 1.2px);background-size:14px 14px}
+  .appicon .icon{
+    width:140px;height:140px;border-radius:30px;
+    background:var(--red);
+    border:3px solid var(--ink);box-shadow:6px 6px 0 var(--cream);
+    display:flex;align-items:center;justify-content:center;position:relative;z-index:2;
+  }
+  .appicon .icon svg{width:80%}
+
+  /* ============ MOTION ============ */
+  .motion-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .motion-card{
+    border:2px solid var(--ink);background:var(--cream);
+    padding:24px;box-shadow:5px 5px 0 var(--ink);
+    display:flex;flex-direction:column;gap:14px;min-height:200px;
+  }
+  .motion-card .label{font-family:'JetBrains Mono';font-size:11px;letter-spacing:2px;font-weight:700;color:var(--gray)}
+  .motion-card .name{font-family:'Cairo';font-weight:900;font-size:22px;letter-spacing:-.5px}
+  .motion-card .demo{flex:1;display:flex;align-items:center;justify-content:center}
+  .motion-dot{width:50px;height:50px;background:var(--red);border:2px solid var(--ink);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+  .motion-skew{
+    padding:14px 22px;background:var(--ink);color:var(--cream);
+    font-family:'Cairo';font-weight:900;
+    transform:skewX(-8deg);
+    animation:wob 2.5s ease-in-out infinite;
+  }
+  .motion-skew span{display:inline-block;transform:skewX(8deg)}
+  @keyframes wob{0%,100%{transform:skewX(-8deg)}50%{transform:skewX(-12deg) translateY(-3px)}}
+  .motion-marquee-mini{
+    width:100%;height:40px;background:var(--ink);color:var(--cream);
+    border:2px solid var(--ink);overflow:hidden;display:flex;align-items:center;
+  }
+  .motion-marquee-mini > div{
+    display:flex;gap:30px;font-family:'Anton';font-size:18px;letter-spacing:2px;
+    white-space:nowrap;animation:slide 12s linear infinite;
+  }
+  .motion-card .desc{font-size:13px;color:#444;line-height:1.6;font-weight:600}
+
+  /* ============ FOOTER ============ */
+  footer.docfoot{
+    background:var(--ink);color:var(--cream);
+    padding:60px 32px 30px;margin-top:60px;
+    border-top:3px solid var(--ink);
+  }
+  footer.docfoot .container{
+    max-width:1480px;margin:0 auto;display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;
+    padding-bottom:30px;border-bottom:1px solid #333;
+  }
+  footer.docfoot .brand{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  footer.docfoot .brand svg{width:50px;height:50px}
+  footer.docfoot .brand .word{font-family:'Cairo';font-weight:900;font-size:26px;transform:skewX(-8deg);display:inline-block}
+  footer.docfoot p{color:#aaa;line-height:1.7;font-size:14px;max-width:340px}
+  footer.docfoot h5{font-family:'JetBrains Mono';font-size:11px;color:var(--yellow);letter-spacing:2px;font-weight:700;text-transform:uppercase;margin-bottom:12px}
+  footer.docfoot ul{list-style:none}
+  footer.docfoot li{margin-bottom:6px;font-size:14px;color:#ccc}
+  footer.docfoot .bottom{
+    max-width:1480px;margin:24px auto 0;display:flex;justify-content:space-between;
+    color:#777;font-family:'JetBrains Mono';font-size:12px;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:1100px){
+    .shell{grid-template-columns:1fr}
+    aside.sidenav{position:static;height:auto;border-left:none;border-bottom:2px solid var(--ink);padding:20px}
+    aside.sidenav ul{flex-direction:row;flex-wrap:wrap;gap:6px}
+    aside.sidenav a{padding:6px 12px;border-right:none;border:1px solid var(--ink);font-size:12px}
+    .color-grid{grid-template-columns:repeat(2,1fr)}
+    .type-grid{grid-template-columns:1fr}
+    .logo-display{grid-template-columns:1fr}
+    .dos-grid{grid-template-columns:repeat(2,1fr)}
+    .mascot-row{grid-template-columns:repeat(3,1fr)}
+    .icon-grid{grid-template-columns:repeat(3,1fr)}
+    .pattern-grid{grid-template-columns:repeat(2,1fr)}
+    .voice-grid{grid-template-columns:1fr}
+    .app-grid{grid-template-columns:1fr 1fr}
+    .motion-grid{grid-template-columns:1fr}
+    .cover-grid{grid-template-columns:1fr;gap:30px}
+    footer.docfoot .container{grid-template-columns:1fr 1fr;gap:24px}
+    .scale-table .thead,.scale-table .row{grid-template-columns:80px 1fr 70px}
+    .scale-table .thead > div:nth-child(4),.scale-table .thead > div:nth-child(5){display:none}
+    .scale-table .row > div:nth-child(4),.scale-table .row > div:nth-child(5){display:none}
+  }
+  @media (max-width:600px){
+    main.doc{padding:0 18px 60px}
+    header.top{padding:12px 16px}
+    header.top .meta .pill:not(:last-child){display:none}
+    .color-grid{grid-template-columns:1fr 1fr}
+    .quotes-grid{grid-template-columns:1fr}
+    .app-grid{grid-template-columns:1fr}
+    .pattern-grid,.icon-grid{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================== ROOSTER + ICON DEFS ================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="rooster" viewBox="0 0 240 260">
+      <path d="M120 8 L100 45 L80 22 L72 60 L52 38 L48 78 L34 60 L40 100 Q70 75 120 70 Q170 75 200 100 L206 60 L192 78 L188 38 L168 60 L160 22 L140 45 Z" fill="#E31C23" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+      <ellipse cx="120" cy="135" rx="78" ry="74" fill="#FFFFFF" stroke="#111" stroke-width="4"/>
+      <path d="M50 150 Q60 195 110 205 L110 175 Q70 165 50 150Z" fill="#F2F2F2"/>
+      <rect x="38" y="118" width="164" height="6" fill="#111"/>
+      <rect x="50" y="124" width="64" height="34" rx="6" fill="#111" stroke="#111" stroke-width="3"/>
+      <rect x="126" y="124" width="64" height="34" rx="6" fill="#111" stroke="#111" stroke-width="3"/>
+      <path d="M58 130 L78 130 L70 152 L52 152 Z" fill="#3A3A3A"/>
+      <path d="M134 130 L154 130 L146 152 L128 152 Z" fill="#3A3A3A"/>
+      <circle cx="68" cy="135" r="2.5" fill="#FFFFFF"/>
+      <circle cx="144" cy="135" r="2.5" fill="#FFFFFF"/>
+      <path d="M100 168 Q120 162 140 168 L132 188 Q120 196 108 188 Z" fill="#FFB400" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+      <line x1="100" y1="178" x2="140" y2="178" stroke="#111" stroke-width="2.5"/>
+      <path d="M108 196 Q112 220 124 222 Q136 220 132 196 Q120 200 108 196Z" fill="#E31C23" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M86 178 Q92 184 98 178" stroke="#111" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M142 178 Q148 184 154 178" stroke="#111" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- mono variant: solid -->
+    <symbol id="rooster-mono" viewBox="0 0 240 260">
+      <path d="M120 8 L100 45 L80 22 L72 60 L52 38 L48 78 L34 60 L40 100 Q70 75 120 70 Q170 75 200 100 L206 60 L192 78 L188 38 L168 60 L160 22 L140 45 Z" fill="currentColor"/>
+      <ellipse cx="120" cy="135" rx="78" ry="74" fill="currentColor"/>
+      <path d="M100 168 Q120 162 140 168 L132 188 Q120 196 108 188 Z" fill="currentColor"/>
+      <path d="M108 196 Q112 220 124 222 Q136 220 132 196 Q120 200 108 196Z" fill="currentColor"/>
+    </symbol>
+
+    <!-- outline variant -->
+    <symbol id="rooster-outline" viewBox="0 0 240 260">
+      <g fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round">
+        <path d="M120 8 L100 45 L80 22 L72 60 L52 38 L48 78 L34 60 L40 100 Q70 75 120 70 Q170 75 200 100 L206 60 L192 78 L188 38 L168 60 L160 22 L140 45 Z"/>
+        <ellipse cx="120" cy="135" rx="78" ry="74"/>
+        <rect x="50" y="124" width="64" height="34" rx="6"/>
+        <rect x="126" y="124" width="64" height="34" rx="6"/>
+        <path d="M100 168 Q120 162 140 168 L132 188 Q120 196 108 188 Z"/>
+        <path d="M108 196 Q112 220 124 222 Q136 220 132 196 Q120 200 108 196Z"/>
+      </g>
+    </symbol>
+
+    <symbol id="bolt" viewBox="0 0 32 32">
+      <path d="M18 2 L4 18 L13 18 L10 30 L26 12 L17 12 L20 2 Z" fill="currentColor" stroke="#111" stroke-width="2" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="bolt-solid" viewBox="0 0 32 32">
+      <path d="M18 2 L4 18 L13 18 L10 30 L26 12 L17 12 L20 2 Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="star4" viewBox="0 0 32 32">
+      <path d="M16 0 L19 13 L32 16 L19 19 L16 32 L13 19 L0 16 L13 13 Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="speedlines" viewBox="0 0 200 200">
+      <g stroke="currentColor" stroke-width="6" stroke-linecap="round">
+        <line x1="10" y1="20" x2="80" y2="20"/>
+        <line x1="30" y1="50" x2="120" y2="50"/>
+        <line x1="0" y1="90" x2="60" y2="90"/>
+        <line x1="40" y1="130" x2="140" y2="130"/>
+        <line x1="20" y1="170" x2="90" y2="170"/>
+      </g>
+    </symbol>
+    <symbol id="arrow" viewBox="0 0 32 32">
+      <path d="M6 16 L26 16 M18 8 L26 16 L18 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="dot4" viewBox="0 0 32 32">
+      <circle cx="16" cy="16" r="10" fill="currentColor"/>
+    </symbol>
+    <symbol id="tm" viewBox="0 0 32 32">
+      <text x="50%" y="58%" text-anchor="middle" font-family="Anton" font-size="14" fill="currentColor">TM</text>
+      <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"/>
+    </symbol>
+    <symbol id="flame" viewBox="0 0 32 32">
+      <path d="M16 2 Q10 12 12 18 Q8 16 8 22 Q8 28 16 30 Q24 28 24 22 Q24 16 20 18 Q22 12 16 2 Z" fill="currentColor" stroke="#111" stroke-width="2" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ================== TOP BAR ================== -->
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 240 260"><use href="#rooster"/></svg>
+    <span class="word">تشيكنييز</span>
+    <span class="pill ink mono">Design&nbsp;System</span>
+  </div>
+  <div class="meta">
+    <span class="pill mono">v1.0</span>
+    <span class="pill yellow mono">2026 Edition</span>
+    <span class="pill red mono">★ INTERNAL</span>
+  </div>
+</header>
+
+<div class="shell">
+  <!-- ================== SIDE NAV ================== -->
+  <aside class="sidenav">
+    <h5>Contents</h5>
+    <ul>
+      <li><a href="#cover"><span class="num">00</span> الغلاف</a></li>
+      <li><a href="#brand"><span class="num">01</span> الهوية</a></li>
+      <li><a href="#logo"><span class="num">02</span> الشعار</a></li>
+      <li><a href="#color"><span class="num">03</span> الألوان</a></li>
+      <li><a href="#type"><span class="num">04</span> الخطوط</a></li>
+      <li><a href="#mascot"><span class="num">05</span> التميمة</a></li>
+      <li><a href="#icons"><span class="num">06</span> الأيقونات</a></li>
+      <li><a href="#patterns"><span class="num">07</span> الأنماط</a></li>
+      <li><a href="#components"><span class="num">08</span> المكوّنات</a></li>
+      <li><a href="#voice"><span class="num">09</span> النبرة</a></li>
+      <li><a href="#applications"><span class="num">10</span> التطبيقات</a></li>
+      <li><a href="#motion"><span class="num">11</span> الحركة</a></li>
+    </ul>
+  </aside>
+
+  <!-- ================== MAIN DOC ================== -->
+  <main class="doc">
+
+    <!-- ====== 00 COVER ====== -->
+    <section id="cover" class="cover">
+      <div class="cover-grid">
+        <div>
+          <span class="pill red mono">★ DESIGN SYSTEM v1.0</span>
+          <h1 style="margin-top:20px">
+            <span class="alt">تشيكنييز</span><br/>
+            BRAND<br/>BIBLE
+            <span class="small">CRUNCH IS AN ART</span>
+          </h1>
+        </div>
+        <div class="cover-meta">
+          <div class="cell"><div class="lbl">VERSION</div><div class="val">1.0.0</div></div>
+          <div class="cell dark"><div class="lbl">DATE</div><div class="val">APR 2026</div></div>
+          <div class="cell red"><div class="lbl">CATEGORY</div><div class="val">Fried Chicken QSR</div></div>
+          <div class="cell"><div class="lbl">MARKET</div><div class="val">MENA</div></div>
+          <div class="cell" style="grid-column:1/-1;background:var(--yellow)"><div class="lbl">PRINCIPLE</div><div class="val">Loud, Crispy, Unapologetic.</div></div>
+        </div>
+      </div>
+
+      <div class="slogan-band">
+        <div class="slogan-band-track">
+          <span style="display:flex;align-items:center;gap:50px">
+            CRUNCH IS AN ART <span class="dot"></span>
+            <span class="star">★</span> HOT &amp; CRISPY <span class="dot"></span>
+            تشيكنييز <span class="dot"></span>
+            CRUNCH MODE ON <span class="dot"></span>
+            كريسبي على مزاجك <span class="dot"></span>
+          </span>
+          <span aria-hidden="true" style="display:flex;align-items:center;gap:50px">
+            CRUNCH IS AN ART <span class="dot"></span>
+            <span class="star">★</span> HOT &amp; CRISPY <span class="dot"></span>
+            تشيكنييز <span class="dot"></span>
+            CRUNCH MODE ON <span class="dot"></span>
+            كريسبي على مزاجك <span class="dot"></span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 01 BRAND ====== -->
+    <section id="brand">
+      <div class="sec-head">
+        <span class="sec-num">01</span>
+        <span class="sec-kicker">Brand · الهوية</span>
+        <h2>هويّة <em>صريحة</em>،<br/>مزاج عالي.</h2>
+      </div>
+      <p class="sec-lede">
+        تشيكنييز مش مجرد مطعم دجاج. هي تجربة كرنشي صاخبة موجّهة لجيل يحب الأكل الشهي بدون تكلّف. اللهجة شبابية، التصميم جريء، والإحساس دايمًا "Hot & Crispy".
+      </p>
+
+      <div class="voice-grid">
+        <div class="voice-card">
+          <div class="num">01</div>
+          <div class="title">جريئة</div>
+          <div class="desc">ألوان قوية، خطوط ثقيلة، طباعة مائلة. لا للترددية، لا للهدوء. كل عنصر يصرخ بثقة.</div>
+        </div>
+        <div class="voice-card">
+          <div class="num">02</div>
+          <div class="title">شبابية</div>
+          <div class="desc">لغة عامية، مرح، إحساس "ستريت ستايل". كأنك بتحكي مع صاحبك مش مع زبون.</div>
+        </div>
+        <div class="voice-card">
+          <div class="num">03</div>
+          <div class="title">شهيّة</div>
+          <div class="desc">كل صورة، كل كلمة، كل نمط — يخدم هدف واحد: يفتح النفس ويخلّيك تطلب.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 02 LOGO ====== -->
+    <section id="logo">
+      <div class="sec-head">
+        <span class="sec-num">02</span>
+        <span class="sec-kicker">Logo · الشعار</span>
+        <h2>شعار <em>بيضرب</em>.</h2>
+      </div>
+      <p class="sec-lede">
+        الشعار يجمع بين تميمة الديك بالنظارات السوداء والاسم العربي بخط ثقيل مائل. التميمة تحمل الشخصية، النص يحمل الاسم، والشعار الكامل لازم يفضل واضح ومقروء على أي خلفية.
+      </p>
+
+      <div class="logo-display">
+        <div class="logo-main">
+          <div class="logo-mark">
+            <svg viewBox="0 0 240 260"><use href="#rooster"/></svg>
+            <span class="word">تشيكنييز</span>
+            <span class="tag">★ FRIED CHICKEN ★</span>
+          </div>
+        </div>
+        <div class="logo-variants">
+          <div class="logo-variant dark">
+            <span class="lbl">DARK BG</span>
+            <div style="display:flex;align-items:center;gap:10px">
+              <svg viewBox="0 0 240 260" style="width:50px;height:50px"><use href="#rooster"/></svg>
+              <span class="word">تشيكنييز</span>
+            </div>
+          </div>
+          <div class="logo-variant red">
+            <span class="lbl">RED BG</span>
+            <div style="display:flex;align-items:center;gap:10px">
+              <svg viewBox="0 0 240 260" style="width:50px;height:50px;color:#fff"><use href="#rooster-mono"/></svg>
+              <span class="word">تشيكنييز</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Cairo';font-weight:900;font-size:22px;margin:30px 0 14px;display:flex;align-items:center;gap:12px">
+        <span style="width:8px;height:24px;background:var(--red);transform:skewX(-12deg)"></span>
+        المساحة الآمنة (Clear Space)
+      </h3>
+      <p class="sec-lede" style="margin-bottom:20px;font-size:15px">
+        احتفظ بمسافة فارغة حول الشعار تساوي ارتفاع التميمة ÷ 4 على الأقل. لا تضع نصوصًا أو عناصر داخل هذه المساحة.
+      </p>
+      <div class="clear-space" style="margin-bottom:48px">
+        <div class="clear-space-inner">
+          <svg viewBox="0 0 240 260"><use href="#rooster"/></svg>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Cairo';font-weight:900;font-size:22px;margin:30px 0 14px;display:flex;align-items:center;gap:12px">
+        <span style="width:8px;height:24px;background:var(--red);transform:skewX(-12deg)"></span>
+        افعل / لا تفعل
+      </h3>
+      <div class="dos-grid">
+        <div class="do-card do">
+          <span class="icon">✓ DO</span>
+          <div class="demo"><svg viewBox="0 0 240 260"><use href="#rooster"/></svg></div>
+          <div class="caption">استخدم الشعار بألوانه الأصلية على خلفية كريمية أو سوداء.</div>
+        </div>
+        <div class="do-card do">
+          <span class="icon">✓ DO</span>
+          <div class="demo"><span class="word" style="font-family:'Cairo';font-weight:900;font-size:30px;transform:skewX(-8deg);display:inline-block">تشيكنييز</span></div>
+          <div class="caption">حافظ على الميل الـ8° للنص العربي دائمًا.</div>
+        </div>
+        <div class="do-card dont">
+          <span class="icon">✗ DON'T</span>
+          <div class="demo"><span class="stretched"><svg viewBox="0 0 240 260" style="width:80px;height:80px"><use href="#rooster"/></svg></span></div>
+          <div class="caption">لا تشدّ الشعار أفقيًا أو رأسيًا.</div>
+        </div>
+        <div class="do-card dont">
+          <span class="icon">✗ DON'T</span>
+          <div class="demo recolored"><svg viewBox="0 0 240 260"><use href="#rooster"/></svg></div>
+          <div class="caption">لا تغيّر ألوان الشعار خارج الباليت الرسمي.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 03 COLOR ====== -->
+    <section id="color">
+      <div class="sec-head">
+        <span class="sec-num">03</span>
+        <span class="sec-kicker">Color · الألوان</span>
+        <h2>أربع ألوان <em>لا غير</em>.</h2>
+      </div>
+      <p class="sec-lede">
+        الباليت محدود بأربع ألوان فقط: الأحمر للطاقة، الأسود للسلطة، الكريمي للراحة، الأصفر للنكهة. تجنّب أي تدرّجات أو ألوان خارج النظام.
+      </p>
+
+      <div class="color-grid">
+        <div class="swatch red">
+          <div class="chip"><span class="role">PRIMARY · RED</span></div>
+          <div class="info">
+            <div class="name">كرنشي ريد</div>
+            <div class="codes">
+              <div class="row"><span>HEX</span><span>#E31C23</span></div>
+              <div class="row"><span>RGB</span><span>227 · 28 · 35</span></div>
+              <div class="row"><span>CMYK</span><span>0 · 100 · 90 · 0</span></div>
+              <div class="row"><span>USE</span><span>Accents · CTA</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="swatch ink">
+          <div class="chip"><span class="role">PRIMARY · INK</span></div>
+          <div class="info">
+            <div class="name">ميد نايت إنك</div>
+            <div class="codes">
+              <div class="row"><span>HEX</span><span>#111111</span></div>
+              <div class="row"><span>RGB</span><span>17 · 17 · 17</span></div>
+              <div class="row"><span>CMYK</span><span>0 · 0 · 0 · 100</span></div>
+              <div class="row"><span>USE</span><span>Type · Outlines</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="swatch cream">
+          <div class="chip"><span class="role">BASE · CREAM</span></div>
+          <div class="info">
+            <div class="name">باكت كريم</div>
+            <div class="codes">
+              <div class="row"><span>HEX</span><span>#F7F2E9</span></div>
+              <div class="row"><span>RGB</span><span>247 · 242 · 233</span></div>
+              <div class="row"><span>CMYK</span><span>2 · 3 · 8 · 0</span></div>
+              <div class="row"><span>USE</span><span>Background</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="swatch yellow">
+          <div class="chip"><span class="role">ACCENT · YELLOW</span></div>
+          <div class="info">
+            <div class="name">سبايسي يلو</div>
+            <div class="codes">
+              <div class="row"><span>HEX</span><span>#FFB400</span></div>
+              <div class="row"><span>RGB</span><span>255 · 180 · 0</span></div>
+              <div class="row"><span>CMYK</span><span>0 · 30 · 100 · 0</span></div>
+              <div class="row"><span>USE</span><span>Highlights</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Cairo';font-weight:900;font-size:22px;margin:30px 0 14px;display:flex;align-items:center;gap:12px">
+        <span style="width:8px;height:24px;background:var(--red);transform:skewX(-12deg)"></span>
+        نسبة الاستخدام (Color Ratio)
+      </h3>
+      <div class="ratio-bar">
+        <div class="r-cream">CREAM · 55%</div>
+        <div class="r-ink">INK · 25%</div>
+        <div class="r-red">RED · 15%</div>
+        <div class="r-yellow">5%</div>
+      </div>
+      <div class="ratio-note">
+        ★ القاعدة الذهبية: الكريمي يمسك المساحة، الأسود يقرأ، الأحمر يقطع، الأصفر يلمّع. لا تعكس الترتيب أبدًا.
+      </div>
+    </section>
+
+    <!-- ====== 04 TYPOGRAPHY ====== -->
+    <section id="type">
+      <div class="sec-head">
+        <span class="sec-num">04</span>
+        <span class="sec-kicker">Typography · الخطوط</span>
+        <h2>خط <em>بيصرخ</em>.</h2>
+      </div>
+      <p class="sec-lede">
+        نستخدم خطّين فقط: <strong>Cairo Black</strong> للنص العربي والعناوين، و<strong>Anton</strong> للنصوص اللاتينية والشعارات الفرعية. الميل الافتراضي للعناوين المائلة هو ‎-8°‎.
+      </p>
+
+      <div class="type-grid">
+        <div class="type-card">
+          <div class="label">PRIMARY · ARABIC</div>
+          <h3>Cairo Black 900</h3>
+          <div class="specimen-ar">ع</div>
+          <div class="meta-row">
+            <span class="pill mono">A → ي</span>
+            <span class="pill mono">٠ → ٩</span>
+            <span class="pill mono">Weight 900</span>
+            <span class="pill mono">Skew -8°</span>
+          </div>
+        </div>
+        <div class="type-card dark">
+          <div class="label">PRIMARY · LATIN</div>
+          <h3 style="color:var(--yellow)">Anton Regular</h3>
+          <div class="specimen-en">Aa</div>
+          <div class="meta-row">
+            <span class="pill mono">A → Z</span>
+            <span class="pill mono">0 → 9</span>
+            <span class="pill mono">Weight 400</span>
+            <span class="pill mono">Tracking +1px</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Cairo';font-weight:900;font-size:22px;margin:30px 0 14px;display:flex;align-items:center;gap:12px">
+        <span style="width:8px;height:24px;background:var(--red);transform:skewX(-12deg)"></span>
+        Type Scale
+      </h3>
+      <div class="scale-table">
+        <div class="thead">
+          <div>Token</div>
+          <div>Sample</div>
+          <div>Size</div>
+          <div>Line</div>
+          <div>Tracking</div>
+        </div>
+        <div class="row"><div class="name">DISPLAY</div><div class="preview" style="font-size:56px">كريسبي</div><div class="size">128 / 8rem</div><div class="lh">.92</div><div class="ls">-2px</div></div>
+        <div class="row"><div class="name">H1</div><div class="preview" style="font-size:42px">على مزاجك</div><div class="size">72 / 4.5rem</div><div class="lh">.95</div><div class="ls">-1.5px</div></div>
+        <div class="row"><div class="name">H2</div><div class="preview" style="font-size:32px">CRUNCH MODE</div><div class="size">48 / 3rem</div><div class="lh">1.0</div><div class="ls">-1px</div></div>
+        <div class="row"><div class="name">H3</div><div class="preview" style="font-size:24px">سبايسي راب</div><div class="size">28 / 1.75rem</div><div class="lh">1.1</div><div class="ls">-.5px</div></div>
+        <div class="row"><div class="name">BODY</div><div class="preview" style="font-size:16px;font-weight:600">دجاج مقرمش على الطريقة اللي تحبها</div><div class="size">16 / 1rem</div><div class="lh">1.6</div><div class="ls">0</div></div>
+        <div class="row"><div class="name">CAPTION</div><div class="preview" style="font-size:12px;font-weight:600;font-family:'JetBrains Mono';letter-spacing:1.5px">★ FRIED CHICKEN SINCE DAY ONE ★</div><div class="size">12 / .75rem</div><div class="lh">1.4</div><div class="ls">+1.5px</div></div>
+      </div>
+    </section>
+
+    <!-- ====== 05 MASCOT ====== -->
+    <section id="mascot">
+      <div class="sec-head">
+        <span class="sec-num">05</span>
+        <span class="sec-kicker">Mascot · التميمة</span>
+        <h2>الديك <em>بنظارته</em>.</h2>
+      </div>
+      <p class="sec-lede">
+        التميمة الرسمية: ديك أبيض بعرف أحمر، نظارات سوداء، منقار أصفر، ولحية حمراء. شخصية واثقة، شبابية، ومرحة. ممنوع تعديل ملامحها أو إضافة إكسسوارات.
+      </p>
+
+      <div class="mascot-row">
+        <div class="mascot-tile t1">
+          <svg viewBox="0 0 240 260"><use href="#rooster"/></svg>
+          <span class="name">FULL COLOR</span>
+        </div>
+        <div class="mascot-tile t2">
+          <svg viewBox="0 0 240 260" style="color:#fff"><use href="#rooster-mono"/></svg>
+          <span class="name">MONO · WHITE</span>
+        </div>
+        <div class="mascot-tile t3">
+          <svg viewBox="0 0 240 260" style="color:#fff"><use href="#rooster-mono"/></svg>
+          <span class="name">MONO · ON RED</span>
+        </div>
+        <div class="mascot-tile t4">
+          <svg viewBox="0 0 240 260" style="color:#111"><use href="#rooster-mono"/></svg>
+          <span class="name">MONO · BLACK</span>
+        </div>
+        <div class="mascot-tile t5">
+          <svg viewBox="0 0 240 260" style="color:#111"><use href="#rooster-outline"/></svg>
+          <span class="name">OUTLINE</span>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Cairo';font-weight:900;font-size:22px;margin:30px 0 14px;display:flex;align-items:center;gap:12px">
+        <span style="width:8px;height:24px;background:var(--red);transform:skewX(-12deg)"></span>
+        قواعد الاستخدام
+      </h3>
+      <ul style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;list-style:none">
+        <li style="padding:14px;border:2px solid var(--ink);background:var(--cream-2);font-weight:700">★ الحجم الأدنى للتميمة في الطباعة: 24mm.</li>
+        <li style="padding:14px;border:2px solid var(--ink);background:var(--cream-2);font-weight:700">★ الحجم الأدنى للتميمة في الديجيتال: 32px.</li>
+        <li style="padding:14px;border:2px solid var(--ink);background:var(--cream-2);font-weight:700">★ النظارة دائمًا واضحة، لا تلوّنها بألوان أخرى.</li>
+        <li style="padding:14px;border:2px solid var(--ink);background:var(--cream-2);font-weight:700">★ العرف الأحمر هو سمة لا تتنازل عنها.</li>
+      </ul>
+    </section>
+
+    <!-- ====== 06 ICONOGRAPHY ====== -->
+    <section id="icons">
+      <div class="sec-head">
+        <span class="sec-num">06</span>
+        <span class="sec-kicker">Iconography · الأيقونات</span>
+        <h2>عناصر <em>صغيرة</em>،<br/>طاقة كبيرة.</h2>
+      </div>
+      <p class="sec-lede">
+        الأيقونات بسيطة، خطّية، وعفوية. تستخدم لتعزيز الإحساس بالحركة والإثارة، وليس لاستبدال النص.
+      </p>
+
+      <div class="icon-grid">
+        <div class="icon-tile bolt">
+          <svg><use href="#bolt"/></svg>
+          <span class="lbl">BOLT</span>
+        </div>
+        <div class="icon-tile star">
+          <svg><use href="#star4"/></svg>
+          <span class="lbl">SPARK</span>
+        </div>
+        <div class="icon-tile dot">
+          <svg><use href="#dot4"/></svg>
+          <span class="lbl">DOT</span>
+        </div>
+        <div class="icon-tile speed">
+          <svg style="color:var(--red)"><use href="#speedlines"/></svg>
+          <span class="lbl">SPEED</span>
+        </div>
+        <div class="icon-tile arrow">
+          <svg><use href="#arrow"/></svg>
+          <span class="lbl">ARROW</span>
+        </div>
+        <div class="icon-tile">
+          <svg style="color:var(--red)"><use href="#flame"/></svg>
+          <span class="lbl">FLAME</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 07 PATTERNS ====== -->
+    <section id="patterns">
+      <div class="sec-head">
+        <span class="sec-num">07</span>
+        <span class="sec-kicker">Patterns · الأنماط</span>
+        <h2>أنماط <em>تتنفّس</em>.</h2>
+      </div>
+      <p class="sec-lede">
+        خمسة أنماط أساسية: نقاط الهالفتون، الخطوط القطرية، خطوط الحركة، نمط الأيقونات، ونمط الصاعقة. تستخدم كخلفيات للتغليف، السوشيال، والمواد الترويجية.
+      </p>
+
+      <div class="pattern-grid">
+        <div class="pattern-tile pat-halftone-light"><span class="lbl">HALFTONE LIGHT</span></div>
+        <div class="pattern-tile pat-halftone-dark"><span class="lbl">HALFTONE DARK</span></div>
+        <div class="pattern-tile pat-stripes"><span class="lbl">DIAGONAL STRIPES</span></div>
+        <div class="pattern-tile pat-action-lines"><span class="lbl">ACTION LINES</span></div>
+        <div class="pattern-tile pat-icons">
+          <svg><use href="#bolt-solid"/></svg>
+          <svg class="on"><use href="#bolt-solid"/></svg>
+          <svg><use href="#star4"/></svg>
+          <svg class="y"><use href="#star4"/></svg>
+          <svg><use href="#flame"/></svg>
+          <svg class="on"><use href="#bolt-solid"/></svg>
+          <svg><use href="#star4"/></svg>
+          <svg class="y"><use href="#flame"/></svg>
+          <span class="lbl">ICON SCATTER</span>
+        </div>
+        <div class="pattern-tile pat-yellow-bolt">
+          <svg><use href="#bolt-solid"/></svg>
+          <span class="lbl">BOLT BURST</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 08 COMPONENTS ====== -->
+    <section id="components">
+      <div class="sec-head">
+        <span class="sec-num">08</span>
+        <span class="sec-kicker">Components · المكوّنات</span>
+        <h2>المكوّنات <em>الجاهزة</em>.</h2>
+      </div>
+      <p class="sec-lede">
+        مكوّنات قابلة لإعادة الاستخدام في الويب، السوشيال، والتطبيق. كلها تستخدم الميل الـ8°، ظل صلب 5px، وحدود سوداء سميكة.
+      </p>
+
+      <!-- Buttons -->
+      <div class="component-block">
+        <h3>Buttons</h3>
+        <div class="preview">
+          <span class="preview-tag">PREVIEW</span>
+          <button class="btn-primary"><span>اطلب الآن ←</span></button>
+          <button class="btn-primary btn-red"><span>أضف للسلة</span></button>
+          <button class="btn-primary btn-yellow"><span>عرض القائمة</span></button>
+          <button class="btn-ghost"><span>المزيد</span></button>
+        </div>
+        <div class="codeblock"><span class="com">// Primary button</span><br/>
+&lt;<span class="tag">button</span> <span class="attr">class</span>=<span class="str">"btn-primary"</span>&gt;<br/>
+&nbsp;&nbsp;&lt;<span class="tag">span</span>&gt;اطلب الآن ←&lt;/<span class="tag">span</span>&gt;<br/>
+&lt;/<span class="tag">button</span>&gt;</div>
+      </div>
+
+      <!-- Badges -->
+      <div class="component-block">
+        <h3>Badges &amp; Tags</h3>
+        <div class="preview">
+          <span class="preview-tag">PREVIEW</span>
+          <span class="badge b-red">★ HOT</span>
+          <span class="badge b-ink">NEW</span>
+          <span class="badge b-yellow">SPICY</span>
+          <span class="badge b-cream">★ BESTSELLER</span>
+        </div>
+      </div>
+
+      <!-- Stickers -->
+      <div class="component-block">
+        <h3>Stickers</h3>
+        <div class="preview">
+          <span class="preview-tag">PREVIEW</span>
+          <div class="sticker-circle">CRISPY!</div>
+          <div class="sticker-rect">HOT!</div>
+          <div class="sticker-tag"><span>★ NEW DROP</span></div>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="component-block">
+        <h3>Product Cards</h3>
+        <div class="preview" style="padding:30px">
+          <span class="preview-tag">PREVIEW</span>
+          <div class="sample-card red">
+            <div class="num"><small>ريال</small>56</div>
+            <div class="en">DOUBLE BUCKET</div>
+            <div class="name">دبل باكت</div>
+          </div>
+          <div class="sample-card">
+            <div class="num"><small>ريال</small>24</div>
+            <div class="en">SUPER STRIPS</div>
+            <div class="name">سوبر سترِبس</div>
+          </div>
+          <div class="sample-card yellow">
+            <div class="num"><small>ريال</small>18</div>
+            <div class="en">SPICY WRAP</div>
+            <div class="name">سبايسي راب</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pills -->
+      <div class="component-block">
+        <h3>Pills &amp; Meta Chips</h3>
+        <div class="preview">
+          <span class="preview-tag">PREVIEW</span>
+          <span class="pill mono">v1.0</span>
+          <span class="pill ink mono">DESIGN SYSTEM</span>
+          <span class="pill red mono">★ INTERNAL</span>
+          <span class="pill yellow mono">2026</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 09 VOICE ====== -->
+    <section id="voice">
+      <div class="sec-head">
+        <span class="sec-num">09</span>
+        <span class="sec-kicker">Voice &amp; Tone · النبرة</span>
+        <h2>نتكلم <em>بلهجة</em><br/>الشارع.</h2>
+      </div>
+      <p class="sec-lede">
+        نبرتنا قريبة، صريحة، فيها مزاج. نستخدم لغة عربية يومية بلمسة شبابية. نعمل بإيقاع قصير، جمل مفجّرة، وكلمات تترك أثر.
+      </p>
+
+      <div class="voice-grid" style="margin-bottom:32px">
+        <div class="voice-card">
+          <div class="num">★</div>
+          <div class="title">قصيرة وحادّة</div>
+          <div class="desc">جملة واحدة بتغني عن فقرة. لو ما قدرت تقولها بـ7 كلمات، احذف.</div>
+        </div>
+        <div class="voice-card">
+          <div class="num">★</div>
+          <div class="title">شعبية مش مبتذلة</div>
+          <div class="desc">"على مزاجك" نعم. عبارات سوقية أو جنسية لا. نحن مرحون لا فجّون.</div>
+        </div>
+        <div class="voice-card">
+          <div class="num">★</div>
+          <div class="title">مزاج مش وعد</div>
+          <div class="desc">نبيع تجربة، مش ميزات. الإحساس قبل المعلومة.</div>
+        </div>
+      </div>
+
+      <h3 style="font-family:'Cairo';font-weight:900;font-size:22px;margin:30px 0 14px;display:flex;align-items:center;gap:12px">
+        <span style="width:8px;height:24px;background:var(--red);transform:skewX(-12deg)"></span>
+        أمثلة
+      </h3>
+      <div class="quotes-grid">
+        <div class="quote yes">
+          <span class="lbl">✓ نعم</span>
+          <span class="text">"كريسبي على مزاجك."</span>
+          <span class="note">قصيرة، إيقاعية، مرتبطة بالحالة.</span>
+        </div>
+        <div class="quote no">
+          <span class="lbl">✗ لا</span>
+          <span class="text">"دجاج عالي الجودة بتقنية القلي المتطورة."</span>
+          <span class="note">باردة، تسويقية، لا روح فيها.</span>
+        </div>
+        <div class="quote yes">
+          <span class="lbl">✓ نعم</span>
+          <span class="text">"دخّل وضع الـCrunch Mode."</span>
+          <span class="note">نشيطة، تخلق حالة، تتحول لميم.</span>
+        </div>
+        <div class="quote no">
+          <span class="lbl">✗ لا</span>
+          <span class="text">"تفضّل بزيارتنا للاستمتاع بأشهى الأطباق."</span>
+          <span class="note">رسمية بشكل ميت، شخصية المطعم تختفي.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 10 APPLICATIONS ====== -->
+    <section id="applications">
+      <div class="sec-head">
+        <span class="sec-num">10</span>
+        <span class="sec-kicker">Applications · التطبيقات</span>
+        <h2>الهوية <em>على أرض</em><br/>الواقع.</h2>
+      </div>
+      <p class="sec-lede">
+        كيف تظهر الهوية على التغليف، السوشيال، والتطبيق. القاعدة: نفس الإحساس، نفس الإيقاع، بصرف النظر عن الوسيط.
+      </p>
+
+      <div class="app-grid">
+        <div class="app-tile">
+          <span class="tag">PACKAGING</span>
+          <div class="pkg"><div class="pkg-box"></div></div>
+        </div>
+        <div class="app-tile">
+          <span class="tag">SOCIAL · 1:1</span>
+          <div class="social">
+            <div class="top">@CHICKENEES.SA</div>
+            <div class="center">
+              <span class="crisp">كريسبي</span><br/>
+              على مزاجك!
+            </div>
+            <div class="bottom">
+              <span class="word">تشيكنييز</span>
+              <svg viewBox="0 0 240 260" style="color:#fff"><use href="#rooster-mono"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="app-tile">
+          <span class="tag">APP ICON</span>
+          <div class="appicon">
+            <div class="icon"><svg viewBox="0 0 240 260"><use href="#rooster"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== 11 MOTION ====== -->
+    <section id="motion">
+      <div class="sec-head">
+        <span class="sec-num">11</span>
+        <span class="sec-kicker">Motion · الحركة</span>
+        <h2>حركة <em>صريحة</em>.</h2>
+      </div>
+      <p class="sec-lede">
+        ثلاث حركات أساسية: النبض، الميل المتموّج، والمارٍكي. الأنيميشن دائمًا قصير، حازم، يخدم القراءة لا يعطّلها.
+      </p>
+
+      <div class="motion-grid">
+        <div class="motion-card">
+          <span class="label">★ PULSE</span>
+          <span class="name">نبض الطلب</span>
+          <div class="demo"><div class="motion-dot"></div></div>
+          <span class="desc">يستخدم لزر "اطلب الآن" والتنبيهات. مدة: 2s · ease-in-out · لانهائي.</span>
+        </div>
+        <div class="motion-card">
+          <span class="label">★ SKEW WOBBLE</span>
+          <span class="name">ميل متموّج</span>
+          <div class="demo"><div class="motion-skew"><span>HOVER ME</span></div></div>
+          <span class="desc">للأزرار عند التحويم. تغيير الميل من ‎-8°‎ إلى ‎-12°‎ مع إزاحة عمودية بسيطة.</span>
+        </div>
+        <div class="motion-card">
+          <span class="label">★ MARQUEE</span>
+          <span class="name">شريط الشعارات</span>
+          <div class="demo">
+            <div class="motion-marquee-mini">
+              <div>
+                CRUNCH MODE ON · HOT &amp; CRISPY · CRUNCH MODE ON · HOT &amp; CRISPY ·
+                CRUNCH MODE ON · HOT &amp; CRISPY · CRUNCH MODE ON · HOT &amp; CRISPY ·
+              </div>
+            </div>
+          </div>
+          <span class="desc">شريط لانهائي للشعارات. السرعة: 24-28 ثانية للف الكامل. لا يتوقف عند التحويم.</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ================== FOOTER ================== -->
+<footer class="docfoot">
+  <div class="container">
+    <div>
+      <div class="brand">
+        <svg viewBox="0 0 240 260"><use href="#rooster"/></svg>
+        <span class="word">تشيكنييز</span>
+      </div>
+      <p>هذا الدليل ملك تشيكنييز ولا يسمح باستخدامه خارج إطار العلامة. لأي تعديل أو سؤال، تواصل مع فريق العلامة.</p>
+    </div>
+    <div>
+      <h5>★ Sections</h5>
+      <ul>
+        <li><a href="#brand">Brand</a></li>
+        <li><a href="#logo">Logo</a></li>
+        <li><a href="#color">Color</a></li>
+        <li><a href="#type">Typography</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>★ Components</h5>
+      <ul>
+        <li><a href="#components">Buttons</a></li>
+        <li><a href="#components">Cards</a></li>
+        <li><a href="#components">Stickers</a></li>
+        <li><a href="#patterns">Patterns</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>★ Resources</h5>
+      <ul>
+        <li>Logo files .svg / .ai</li>
+        <li>Cairo &amp; Anton fonts</li>
+        <li>Color tokens .css</li>
+        <li>Brand contact</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bottom">
+    <span>© 2026 تشيكنييز ™ — Brand Bible v1.0</span>
+    <span>Made with ★ &amp; CRUNCH</span>
+  </div>
+</footer>
+
+<script>
+  // active nav highlight on scroll
+  const links=document.querySelectorAll('aside.sidenav a');
+  const sections=document.querySelectorAll('main.doc section');
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const id=e.target.id;
+        links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+id));
+      }
+    });
+  },{rootMargin:"-30% 0px -65% 0px"});
+  sections.forEach(s=>obs.observe(s));
+</script>
+
+</body>
+</html>
